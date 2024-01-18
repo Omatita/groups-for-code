@@ -10,22 +10,29 @@ const vscode = require('vscode');
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "groups-for-code" is now active!');
-
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('groups-for-code.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+	let disposable = vscode.commands.registerCommand('groups-for-code.addToGroup', async () => {
+        let activeTab = getActiveTab();
+        let value = await vscode.window.showInputBox({
+            placeHolder: "group",
+            prompt: "To what group do you want to add the active tab?"
+        });
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from groups for code!');
-	});
+        if (value !== '') {
+            
+            vscode.window.showInformationMessage(`${activeTab.label} added to group: ${value}`);
+        } else{
+            vscode.window.showErrorMessage(`Error while adding the tab to group: group undefined`);
+		}
+
+    });
 
 	context.subscriptions.push(disposable);
 }
+
+function getActiveTab(){ return vscode.window.tabGroups.activeTabGroup.activeTab; }
 
 // This method is called when your extension is deactivated
 function deactivate() {}
