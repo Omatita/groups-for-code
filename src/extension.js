@@ -1,9 +1,7 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
 const stateManager = require('./stateManager.js');
+const vscode = require('vscode');
 const commands = require('./extensionCommmmands.js');
-
+const groupView = require('./groupView.js');
 
 let extensionContext;
 /**
@@ -16,6 +14,9 @@ function activate(context) {
     let comms = commands.registerCommands(context, state);
 
 	context.subscriptions.push(...comms);
+
+    const view = new groupView.GroupViewDataProvider(state);
+    vscode.window.createTreeView('groups-for-code.activeGroups', { treeDataProvider: view });
 
 }
 

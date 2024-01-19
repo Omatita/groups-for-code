@@ -44,9 +44,11 @@ function registerCommands(context, state) {
         });
 
         if (value !== '') {
-            // aggiungere la tab al gruppo
-            state.addToGroup(activeTab.label, value);
-            vscode.window.showInformationMessage(`${activeTab.label} added to group: ${value}`);
+            if(state.addToGroup(activeTab.label, value))
+                vscode.window.showInformationMessage(`${activeTab.label} added to group: ${value}`);
+            else
+                vscode.window.showErrorMessage(`${activeTab.label} not added to group: tab already in a group`);
+
         } else{
             vscode.window.showErrorMessage(`Error while adding the tab to group: group undefined`);
 		}
