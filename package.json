@@ -10,12 +10,21 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": "./extension.js",
+  "main": "./src/extension.js",
   "contributes": {
     "commands": [{
       "command": "groups-for-code.addToGroup",
       "title": "Add active tab to group"
-    }]
+    },
+    {
+      "command" : "groups-for-code.showGroups",
+      "title" : "Show groups"
+    },
+    {
+      "command": "groups-for-code.resetGroups",
+      "title": "Reset groups"
+    }
+  ]
   },
   "scripts": {
     "lint": "eslint .",
