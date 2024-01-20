@@ -10,6 +10,39 @@ function registerCommands(context, state) {
         state.resetState();
         vscode.window.showInformationMessage(`All groups have been reset.`);
     }));
+    let removeGroupCommand = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.removeGroup', async () => {
+        let groupOptions = Object.keys(state.groups).map(groupName => {
+            return { label: groupName };
+        });
+
+        vscode.window.showQuickPick(groupOptions, {
+            placeHolder: 'Chose a group'
+        }).then(selectedGroupName => {
+            if (selectedGroupName) {
+                state.removeGroup(selectedGroupName.label);
+                vscode.window.showInformationMessage(`'${selectedGroupName.label}' has been succesfully removed from the groups.`);
+            }
+        });
+    }));
+    
+
+    let addGroupCommand = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.newGroup', async () => {
+        let value = await vscode.window.showInputBox({
+            placeHolder: "group",
+            prompt: "To what group do you want to add the active tab?"
+        });
+
+        if(value)
+            if(state.addGroup(value))
+                vscode.window.showInformationMessage(`Group: ${value}, created correctly`);
+            else
+                vscode.window.showInformationMessage(`Error: group already existing`);
+        else 
+            vscode.window.showInformationMessage(`Error: undefined grouo name`);
+
+
+        
+    }));
 
     /**
      * shows all groups created
@@ -33,9 +66,8 @@ function registerCommands(context, state) {
 
     /**
      * Adds a tab into a group
-     * TODO return error if the tab is already in a group or move it
      */
-    let addGroupCommand = vscode.commands.registerCommand('groups-for-code.addToGroup', async () => {
+    let addToGroupCommand = vscode.commands.registerCommand('groups-for-code.addToGroup', async () => {
         let activeTab = utils.getActiveTab();
 
         let value = await vscode.window.showInputBox({
@@ -55,7 +87,7 @@ function registerCommands(context, state) {
 
     });
 
-    return [addGroupCommand, showGroupsCommand, resetCommand];
+    return [removeGroupCommand, addToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
 }
 
 module.exports = {

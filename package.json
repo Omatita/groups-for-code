@@ -14,6 +14,15 @@
   "contributes": {
     "commands": [
       {
+        "command": "groups-for-code.newGroup",
+        "icon": "$(add)",
+        "title": "New Group"
+      },
+      {
+        "command": "groups-for-code.deleteGroup",
+        "title": "Delete Group"
+      },
+      {
         "command": "groups-for-code.addToGroup",
         "title": "Add active tab to group"
       },
@@ -22,8 +31,18 @@
         "title": "Show groups"
       },
       {
+        "command": "groups-for-code.showActiveGroup",
+        "title": "Show the selected group",
+        "icon" : "$(eye)"
+      },
+      {
         "command": "groups-for-code.resetGroups",
-        "title": "Reset groups"
+        "title": "Reset all groups"
+      },
+      {
+        "command": "groups-for-code.removeGroup",
+        "icon": "$(trash)",
+        "title": "Remove a group"
       }
     ],
     "views": {
@@ -31,6 +50,21 @@
         {
           "id": "groups-for-code.activeGroups",
           "name": "Groups"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == groups-for-code.activeGroups",
+          "command": "groups-for-code.newGroup",
+          "group": "navigation"
+          
+        },
+        {
+          "when": "view == groups-for-code.activeGroups",
+          "command": "groups-for-code.removeGroup",
+          "group": "navigation"
         }
       ]
     }

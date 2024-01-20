@@ -1,7 +1,9 @@
+
 class StateManager {
     constructor(context) {
         this.context = context;
         this.tabGroups = {};
+        this.view = null;
         this.loadState();
     }
 
@@ -29,6 +31,7 @@ class StateManager {
     saveState() {
         const serializedData = JSON.stringify(this.tabGroups);
         this.context.globalState.update('tabGroups', serializedData);
+        this.view.refresh();
     }
 
 
@@ -43,7 +46,7 @@ class StateManager {
 
     /**
      * checks if the tab is already in other groups
-     * @param {*} tabLabel name of the label usually taken from the active tab
+     * @param {string} tabLabel name of the label usually taken from the active tab
      * @returns true if the tab is grouped
      */
     isTabGrouped(tabLabel) {
@@ -57,11 +60,43 @@ class StateManager {
         return false;
     }
 
+    /**
+     * Removes a group 
+     * @param {string} groupName 
+     * @returns true if the group gets removed succesfully
+     */
+    removeGroup(groupName){
+        if(groupName){
+            if(this.tabGroups[groupName]){
+                delete this.tabGroups[groupName];
+                this.saveState();
+                return true;
+            }else return false;
+        }else  
+            return false;
+    }
+
+    /**
+     * Adds an empty group
+     * @param {string} groupName 
+     * @returns true if the group is added succesfully
+     */
+    addGroup(groupName){
+        if(groupName)
+            if(!this.tabGroups[groupName]){
+                this.tabGroups[groupName] = [];
+                this.saveState();
+            return true;
+            }else 
+                return false;
+        else 
+            return false;
+    }
 
     /**
      * Adds a tab to a group and saves the state
-     * @param {*} tabLabel name of the label usually taken from the active tab
-     * @param {*} groupName name of the group taken from the user
+     * @param {string} tabLabel name of the label usually taken from the active tab
+     * @param {string} groupName name of the group taken from the user
      * @returns true if the tab is added succesfully to the group, false otherwise
      */
     addToGroup(tabLabel, groupName) {
@@ -83,13 +118,17 @@ class StateManager {
         return true;
     }
 
+    setView(view){
+        this.view = view;
+    }
+
     /**
      * 
-     * @param {*} groupId, the group's ID
+     * @param {string} groupId, the group's ID
      * @returns all tabs belonging to a group
      */
     getTabsForGrup(groupId) {
-        return this.tabs[groupId] || [];
+        return this.tabGroups[groupId] || [];
     }
 
     // Properties

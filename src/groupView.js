@@ -9,6 +9,13 @@ class GroupViewItem extends vscode.TreeItem {
 class GroupViewDataProvider {
     constructor(stateManager) {
         this.stateManager = stateManager;
+        this._onDidChangeTreeData = new vscode.EventEmitter();
+        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
+    
+    }
+
+    refresh() {
+        this._onDidChangeTreeData.fire();
     }
 
     getTreeItem(element) {
