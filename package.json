@@ -23,7 +23,7 @@
         "title": "Delete Group"
       },
       {
-        "command": "groups-for-code.addToGroup",
+        "command": "groups-for-code.addActiveToGroup",
         "title": "Add active tab to group"
       },
       {

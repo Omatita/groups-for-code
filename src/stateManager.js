@@ -1,3 +1,4 @@
+var fs = require('fs');
 
 class StateManager {
     constructor(context) {
@@ -17,8 +18,10 @@ class StateManager {
      */
     loadState() {
         const serializedData = this.context.globalState.get('tabGroups');
+        
         if (serializedData) {
             this.tabGroups = JSON.parse(serializedData);
+        fs.writeFile('/home/omatita/Desktop/Dirs/ext/groups-for-code/src/myjsonfile.json', JSON.stringify(this.tabGroups), 'utf8', () => {});
         } else {
             this.tabGroups = {};
         }
@@ -52,7 +55,7 @@ class StateManager {
     isTabGrouped(tabLabel) {
         for (let groupName in this.tabGroups) {
             if (this.tabGroups.hasOwnProperty(groupName)) {
-                if (this.tabGroups[groupName].includes(tabLabel)) {
+                if (this.tabGroups[groupName].some(tab => tab.label === tabLabel)) {
                     return true;
                 }
             }
@@ -78,8 +81,34 @@ class StateManager {
 
     /**
      * Adds an empty group
-     * @param {string} groupName 
-     * @returns true if the group is added succesfully
+     * @param {string} tabLabel the name of the tab
+     * @param {string} tabPath the path of the tab
+     * @param {string} groupName the name of the group
+     * @returns true if the tab is succesfully added to the group
+     */
+    addToGroup(tabLabel, tabPath, groupName) {
+        // Controllo se la scheda è già raggruppata
+        if (this.isTabGrouped(tabLabel))
+            return false;
+    
+        const tab = { label: tabLabel, path: tabPath };
+    
+        if (!this.tabGroups[groupName]) {
+            this.tabGroups[groupName] = [tab];
+        } else if (!this.tabGroups[groupName].find(t => t.label === tabLabel)) {
+            this.tabGroups[groupName].push(tab);
+        } else {
+            return false;
+        }
+    
+        this.saveState();
+        return true;
+    }
+
+    /**
+     * Adds a tab to a group and saves the state
+     * @param {string} groupName name of the group taken from the user
+     * @returns true if the group is created succesfully, false otherwise
      */
     addGroup(groupName){
         if(groupName)
@@ -93,31 +122,6 @@ class StateManager {
             return false;
     }
 
-    /**
-     * Adds a tab to a group and saves the state
-     * @param {string} tabLabel name of the label usually taken from the active tab
-     * @param {string} groupName name of the group taken from the user
-     * @returns true if the tab is added succesfully to the group, false otherwise
-     */
-    addToGroup(tabLabel, groupName) {
-        if(this.isTabGrouped(tabLabel))
-            return false;
-        else{
-            if (!this.tabGroups[groupName]) {
-                this.tabGroups[groupName] = [];
-                this.tabGroups[groupName].push(tabLabel);
-    
-            }else if(!this.tabGroups[groupName].includes(tabLabel))
-                this.tabGroups[groupName].push(tabLabel);
-            else 
-                return false;
-        }
-
-        this.saveState();
-
-        return true;
-    }
-
     setView(view){
         this.view = view;
     }
@@ -127,9 +131,27 @@ class StateManager {
      * @param {string} groupId, the group's ID
      * @returns all tabs belonging to a group
      */
-    getTabsForGrup(groupId) {
-        return this.tabGroups[groupId] || [];
+    // getTabsForGroup(groupId) {
+    //     if (this.tabGroups[groupId]) {
+    //         return this.tabGroups[groupId].map(tab => {
+    //             return { label: tab.label, path: tab.path };
+    //         });
+    //     } else {
+    //         return null;
+    //     }
+    // }
+    getTabsForGroup(groupId) {
+        if (this.tabGroups[groupId]) {
+            return this.tabGroups[groupId].map(tab => {
+                return { label: tab.label, path: tab.path };
+            });
+        } else {
+            // Restituisci un array vuoto invece di null
+            return [];
+        }
     }
+    
+    
 
     // Properties
     // .---.---.---.---.---.---.---.---.---.---.---.---

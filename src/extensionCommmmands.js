@@ -67,27 +67,25 @@ function registerCommands(context, state) {
     /**
      * Adds a tab into a group
      */
-    let addToGroupCommand = vscode.commands.registerCommand('groups-for-code.addToGroup', async () => {
+    let addActiveToGroupCommand = vscode.commands.registerCommand('groups-for-code.addActiveToGroup', async () => {
         let activeTab = utils.getActiveTab();
-
+        
         let value = await vscode.window.showInputBox({
             placeHolder: "group",
             prompt: "To what group do you want to add the active tab?"
         });
-
-        if (value !== '') {
-            if(state.addToGroup(activeTab.label, value))
+    
+        // Get value from user's input
+        if (value) {
+            if (state.addToGroup(activeTab.label, activeTab.path, value))
                 vscode.window.showInformationMessage(`${activeTab.label} added to group: ${value}`);
             else
                 vscode.window.showErrorMessage(`${activeTab.label} not added to group: tab already in a group`);
-
-        } else{
-            vscode.window.showErrorMessage(`Error while adding the tab to group: group undefined`);
-		}
-
+        } else {
+            vscode.window.showErrorMessage(`Error while adding the tab to group: no group selected`);
+        }
     });
-
-    return [removeGroupCommand, addToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
+    return [removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
 }
 
 module.exports = {
