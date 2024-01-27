@@ -1,5 +1,3 @@
-var fs = require('fs');
-
 class StateManager {
     constructor(context) {
         this.context = context;
@@ -21,7 +19,6 @@ class StateManager {
         
         if (serializedData) {
             this.tabGroups = JSON.parse(serializedData);
-        fs.writeFile('/home/omatita/Desktop/Dirs/ext/groups-for-code/src/myjsonfile.json', JSON.stringify(this.tabGroups), 'utf8', () => {});
         } else {
             this.tabGroups = {};
         }
@@ -122,24 +119,19 @@ class StateManager {
             return false;
     }
 
+    /**
+     * Sets the view 
+     * @param {GroupViewItem} view 
+     */
     setView(view){
         this.view = view;
     }
 
     /**
-     * 
+     * returns all the tabs belonging to a given group
      * @param {string} groupId, the group's ID
      * @returns all tabs belonging to a group
      */
-    // getTabsForGroup(groupId) {
-    //     if (this.tabGroups[groupId]) {
-    //         return this.tabGroups[groupId].map(tab => {
-    //             return { label: tab.label, path: tab.path };
-    //         });
-    //     } else {
-    //         return null;
-    //     }
-    // }
     getTabsForGroup(groupId) {
         if (this.tabGroups[groupId]) {
             return this.tabGroups[groupId].map(tab => {
@@ -149,11 +141,10 @@ class StateManager {
             return [];
         }
     }
-    
-    
 
     // Properties
     // .---.---.---.---.---.---.---.---.---.---.---.---
+
     /**
      * @returns the list of all groups
      */

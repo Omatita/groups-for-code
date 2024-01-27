@@ -7,6 +7,7 @@ let extensionContext;
 let view;
 
 /**
+ * activates the extension
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {

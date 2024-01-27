@@ -26,6 +26,9 @@ function registerCommands(context, state) {
     }));
     
 
+    /**
+     * Creates a new empty group
+     */
     let addGroupCommand = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.newGroup', async () => {
         
         let value = await vscode.window.showInputBox({
@@ -89,6 +92,9 @@ function registerCommands(context, state) {
 
     });
 
+    /**
+     * Opens a tab inside a group given the path
+     */
     let openTabCommand = vscode.commands.registerCommand('groups-for-code.openTab', async (path) => {
         if (path) {
             const document = (await vscode.workspace.openTextDocument(path)).save();
@@ -103,9 +109,10 @@ function registerCommands(context, state) {
         }
     });
 
+    /**
+     * Opens all the tabs given a group
+     */
     let openGroupTabsCommand = vscode.commands.registerCommand('groups-for-code.openGroupTabs', async (groupName) => {
-        // vscode.window.showInformationMessage(groupName.label + " scemo");
-
         vscode.commands.executeCommand('workbench.action.closeAllEditors');
 
         let tabs = state.getTabsForGroup(groupName.label);
