@@ -27,6 +27,7 @@ function registerCommands(context, state) {
     
 
     let addGroupCommand = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.newGroup', async () => {
+        
         let value = await vscode.window.showInputBox({
             placeHolder: "group",
             prompt: "To what group do you want to add the active tab?"
@@ -36,11 +37,9 @@ function registerCommands(context, state) {
             if(state.addGroup(value))
                 vscode.window.showInformationMessage(`Group: ${value}, created correctly`);
             else
-                vscode.window.showInformationMessage(`Error: group already existing`);
+                vscode.window.showErrorMessage(`Error: group already existing`);
         else 
-            vscode.window.showInformationMessage(`Error: undefined grouo name`);
-
-
+            vscode.window.showErrorMessage(`Error: undefined group name`);
         
     }));
 
@@ -69,23 +68,55 @@ function registerCommands(context, state) {
      */
     let addActiveToGroupCommand = vscode.commands.registerCommand('groups-for-code.addActiveToGroup', async () => {
         let activeTab = utils.getActiveTab();
-        
-        let value = await vscode.window.showInputBox({
-            placeHolder: "group",
-            prompt: "To what group do you want to add the active tab?"
-        });
     
-        // Get value from user's input
-        if (value) {
-            if (state.addToGroup(activeTab.label, activeTab.path, value))
-                vscode.window.showInformationMessage(`${activeTab.label} added to group: ${value}`);
-            else
-                vscode.window.showErrorMessage(`${activeTab.label} not added to group: tab already in a group`);
+
+        let groupOptions = Object.keys(state.groups).map(groupName => {
+            return { label: groupName };
+        });
+
+        vscode.window.showQuickPick(groupOptions, {
+            placeHolder: 'Chose a group'
+        }).then(selectedGroupName => {
+            if (selectedGroupName.label) {
+                if (state.addToGroup(activeTab.label, activeTab.path, selectedGroupName.label))
+                    vscode.window.showInformationMessage(`${activeTab.label} added to group: ${selectedGroupName.label}`);
+                else
+                    vscode.window.showErrorMessage(`${activeTab.label} not added to group: tab already in a group`);
+            
+            }else 
+                vscode.window.showErrorMessage(`Error: undefined group name`);
+        });
+
+    });
+
+    let openTabCommand = vscode.commands.registerCommand('groups-for-code.openTab', async (path) => {
+        if (path) {
+            const document = (await vscode.workspace.openTextDocument(path)).save();
+
+            if (document) {
+                vscode.window.showTextDocument(document);
+            } else {
+                vscode.window.showErrorMessage(`Unable to open the tab at path: ${path}`);
+            }
         } else {
-            vscode.window.showErrorMessage(`Error while adding the tab to group: no group selected`);
+            vscode.window.showErrorMessage('Error: No path provided for the tab to open');
         }
     });
-    return [removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
+
+    let openGroupTabsCommand = vscode.commands.registerCommand('groups-for-code.openGroupTabs', async (groupName) => {
+        // vscode.window.showInformationMessage(groupName.label + " scemo");
+
+        vscode.commands.executeCommand('workbench.action.closeAllEditors');
+
+        let tabs = state.getTabsForGroup(groupName.label);
+        for (let tab of tabs) {
+            let document = await vscode.workspace.openTextDocument(tab.path);
+            vscode.window.showTextDocument(document, { preview: false });
+        }
+    });
+    
+
+    return [openGroupTabsCommand, openTabCommand, removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
 }
 
 module.exports = {

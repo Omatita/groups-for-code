@@ -1,4 +1,2 @@
-//TODO open the tabs when click on group
-//TODO make the button to open the groups
-//TODO show tabs in groups
-//TODO 
+//TODO showQuickPick when add to group
+//TODO remove tab from group

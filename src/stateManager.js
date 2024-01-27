@@ -146,7 +146,6 @@ class StateManager {
                 return { label: tab.label, path: tab.path };
             });
         } else {
-            // Restituisci un array vuoto invece di null
             return [];
         }
     }
@@ -155,6 +154,9 @@ class StateManager {
 
     // Properties
     // .---.---.---.---.---.---.---.---.---.---.---.---
+    /**
+     * @returns the list of all groups
+     */
     get groups() {
         return this.tabGroups;
     }

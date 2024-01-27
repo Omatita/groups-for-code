@@ -40,6 +40,11 @@
         "title": "Reset all groups"
       },
       {
+        "command": "groups-for-code.openGroupTabs",
+        "title": "Open Group Tabs",
+        "icon": "$(eye)"
+      },
+      {
         "command": "groups-for-code.removeGroup",
         "icon": "$(trash)",
         "title": "Remove a group"
@@ -66,7 +71,14 @@
           "command": "groups-for-code.removeGroup",
           "group": "navigation"
         }
-      ]
+      ],
+      "view/item/context": [
+        {
+            "when": "view == groups-for-code.activeGroups && viewItem == group",
+            "command": "groups-for-code.openGroupTabs",
+            "group": "inline"
+        }
+    ]
     }
   },
   "scripts": {
