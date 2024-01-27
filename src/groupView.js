@@ -7,6 +7,9 @@ class GroupViewDataProvider {
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
     }
 
+    /**
+     * updates the view
+     */
     refresh() {
         this._onDidChangeTreeData.fire();
     }
@@ -14,7 +17,6 @@ class GroupViewDataProvider {
     getTreeItem(element) {
         return element;
     }
-
 
     getChildren(element) {
         if (element === undefined) {

@@ -33,7 +33,7 @@ function registerCommands(context, state) {
         
         let value = await vscode.window.showInputBox({
             placeHolder: "group",
-            prompt: "To what group do you want to add the active tab?"
+            prompt: "New group?"
         });
 
         if(value)

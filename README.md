@@ -19,6 +19,9 @@ This VS Code extension enhances your coding environment by enabling the organiza
 - Click the trash bin icon to remove a group
 - Click the plus button to create an empty group
 
+## Preview
+![Preview](https://github.com/Omatita/groups-for-code/blob/master/groups-for-code.gif)
+
 ## Support
 
 Encounter an issue or have a suggestion? Please open an issue on our [GitHub issues](https://github.com/Omatita/groups-for-code/issues).\

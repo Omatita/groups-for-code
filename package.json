@@ -1,8 +1,14 @@
 {
   "name": "groups-for-code",
+  "publisher": "Omatita",
   "displayName": "groups for code",
   "description": "groups tabs in visual studio code",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "icon": "./logo-dark-groups.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Omatita/groups-for-code"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
