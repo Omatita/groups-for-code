@@ -1,7 +1,6 @@
 const vscode = require('vscode');
 
 /**
- * 
  * @returns the asctive tab object
  */
 function getActiveTab() {

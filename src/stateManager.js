@@ -1,4 +1,8 @@
 class StateManager {
+    /**
+     * 
+     * @param {vscode.context} context: the context of the extension
+     */
     constructor(context) {
         this.context = context;
         this.tabGroups = {};
@@ -10,13 +14,13 @@ class StateManager {
     // Methods
     // .---.---.---.---.---.---.---.---.---.---.---.---
 
-    
+
     /**
      * Loads the states of all groups and tabs
      */
     loadState() {
-        const serializedData = this.context.globalState.get('tabGroups');
-        
+        const serializedData = this.context.globalState.get('tabGroups'); // retrieve groups data
+
         if (serializedData) {
             this.tabGroups = JSON.parse(serializedData);
         } else {
@@ -26,11 +30,12 @@ class StateManager {
 
 
     /**
-     * Saves the states of all groups
+     * Saves the states of all groups and refreshes the view
      */
     saveState() {
         const serializedData = JSON.stringify(this.tabGroups);
-        this.context.globalState.update('tabGroups', serializedData);
+
+        this.context.globalState.update('tabGroups', serializedData); // update global state and refresh the view
         this.view.refresh();
     }
 
@@ -50,7 +55,7 @@ class StateManager {
      * @returns true if the tab is grouped
      */
     isTabGrouped(tabLabel) {
-        for (let groupName in this.tabGroups) {
+        for (let groupName in this.tabGroups) { // for each group check if the tab is grouped
             if (this.tabGroups.hasOwnProperty(groupName)) {
                 if (this.tabGroups[groupName].some(tab => tab.label === tabLabel)) {
                     return true;
@@ -65,16 +70,36 @@ class StateManager {
      * @param {string} groupName 
      * @returns true if the group gets removed succesfully
      */
-    removeGroup(groupName){
-        if(groupName){
-            if(this.tabGroups[groupName]){
+    removeGroup(groupName) {
+        if (groupName) {
+            if (this.tabGroups[groupName]) {
                 delete this.tabGroups[groupName];
                 this.saveState();
                 return true;
-            }else return false;
-        }else  
+            } else return false;
+        } else
             return false;
     }
+
+    /**
+     * removes a trab from any group
+     * @param {string} tabName 
+     * @returns true if no error occurs
+     */
+    removeTab(tabName) {
+        try {
+            Object.keys(this.tabGroups).forEach(groupName => {
+                this.tabGroups[groupName] = this.tabGroups[groupName].filter(tab => tab.label !== tabName);
+            });
+            this.saveState(); // Save the updated state and refresh the view
+        }catch(e){
+            return false;
+        }
+        
+
+        return true;
+    }
+
 
     /**
      * Adds an empty group
@@ -87,9 +112,9 @@ class StateManager {
         // Controllo se la scheda è già raggruppata
         if (this.isTabGrouped(tabLabel))
             return false;
-    
+
         const tab = { label: tabLabel, path: tabPath };
-    
+
         if (!this.tabGroups[groupName]) {
             this.tabGroups[groupName] = [tab];
         } else if (!this.tabGroups[groupName].find(t => t.label === tabLabel)) {
@@ -97,7 +122,7 @@ class StateManager {
         } else {
             return false;
         }
-    
+
         this.saveState();
         return true;
     }
@@ -107,15 +132,15 @@ class StateManager {
      * @param {string} groupName name of the group taken from the user
      * @returns true if the group is created succesfully, false otherwise
      */
-    addGroup(groupName){
-        if(groupName)
-            if(!this.tabGroups[groupName]){
+    addGroup(groupName) {
+        if (groupName)
+            if (!this.tabGroups[groupName]) {
                 this.tabGroups[groupName] = [];
                 this.saveState();
-            return true;
-            }else 
+                return true;
+            } else
                 return false;
-        else 
+        else
             return false;
     }
 
@@ -123,7 +148,7 @@ class StateManager {
      * Sets the view 
      * @param {GroupViewItem} view 
      */
-    setView(view){
+    setView(view) {
         this.view = view;
     }
 
@@ -142,8 +167,10 @@ class StateManager {
         }
     }
 
+
     // Properties
     // .---.---.---.---.---.---.---.---.---.---.---.---
+
 
     /**
      * @returns the list of all groups

@@ -55,6 +55,8 @@ class TabViewItem extends vscode.TreeItem {
             arguments: [path]
         };
     }
+
+
 }
 class GroupViewItem extends vscode.TreeItem {
     constructor(label, collapsibleState) {
@@ -65,8 +67,9 @@ class GroupViewItem extends vscode.TreeItem {
             title: "Open All Tabs",
             arguments: [label] // Passa il nome del gruppo al comando
         };
-
     }
+
+    
 }
 
 module.exports = {

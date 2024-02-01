@@ -39,7 +39,7 @@
       {
         "command": "groups-for-code.showActiveGroup",
         "title": "Show the selected group",
-        "icon" : "$(eye)"
+        "icon": "$(eye)"
       },
       {
         "command": "groups-for-code.resetGroups",
@@ -54,10 +54,15 @@
         "command": "groups-for-code.removeGroup",
         "icon": "$(trash)",
         "title": "Remove a group"
+      },
+      {
+        "command": "groups-for-code.removeTab",
+        "icon": "$(chrome-minimize)",
+        "title": "Remove tab"
       }
     ],
     "views": {
-      "explorer"  : [
+      "explorer": [
         {
           "id": "groups-for-code.activeGroups",
           "name": "Groups"
@@ -70,7 +75,6 @@
           "when": "view == groups-for-code.activeGroups",
           "command": "groups-for-code.newGroup",
           "group": "navigation"
-          
         },
         {
           "when": "view == groups-for-code.activeGroups",
@@ -80,11 +84,16 @@
       ],
       "view/item/context": [
         {
-            "when": "view == groups-for-code.activeGroups && viewItem == group",
-            "command": "groups-for-code.openGroupTabs",
-            "group": "inline"
+          "when": "view == groups-for-code.activeGroups && viewItem == group",
+          "command": "groups-for-code.openGroupTabs",
+          "group": "inline"
+        },
+        {
+          "when": "view == groups-for-code.activeGroups && viewItem == group",
+          "command": "groups-for-code.removeTab",
+          "group": "inline"
         }
-    ]
+      ]
     }
   },
   "scripts": {
