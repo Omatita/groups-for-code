@@ -9,7 +9,7 @@ This VS Code extension enhances your coding environment by enabling the organiza
 - **Intuitive Interface:** Seamlessly integrates with VS Code, offering a user-friendly experience.
 
 ## Installation
-1. Search for "groups fro code" and click Install.
+1. Search for "groups for code" and click Install.
 2. Once installed, the extension is ready to use.
 
 ## Usage
@@ -18,6 +18,8 @@ This VS Code extension enhances your coding environment by enabling the organiza
 - Click the eye icon next to a group's name to open all tabs in that group.
 - Click the trash bin icon to remove a group
 - Click the plus button to create an empty group
+- Click the minus button on a group to remove a tab
+- Click a tab in the Group Manager to open it in the editor area
 
 ## Preview
 ![Preview](https://github.com/Omatita/groups-for-code/blob/master/groups-for-code.gif?raw=true)
