@@ -54,10 +54,11 @@ class StateManager {
      * @param {string} tabLabel name of the label usually taken from the active tab
      * @returns true if the tab is grouped
      */
-    isTabGrouped(tabLabel) {
+    isTabGrouped(tabPath) {
         for (let groupName in this.tabGroups) { // for each group check if the tab is grouped
             if (this.tabGroups.hasOwnProperty(groupName)) {
-                if (this.tabGroups[groupName].some(tab => tab.label === tabLabel)) {
+                if (this.tabGroups[groupName].some(tab => tab.path === tabPath)) {
+
                     return true;
                 }
             }
@@ -110,7 +111,7 @@ class StateManager {
      */
     addToGroup(tabLabel, tabPath, groupName) {
         // Controllo se la scheda è già raggruppata
-        if (this.isTabGrouped(tabLabel))
+        if (this.isTabGrouped(tabPath))
             return false;
 
         const tab = { label: tabLabel, path: tabPath };
