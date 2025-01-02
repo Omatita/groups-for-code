@@ -59,6 +59,10 @@
         "command": "groups-for-code.removeTab",
         "icon": "$(chrome-minimize)",
         "title": "Remove tab"
+      },
+      {
+        "command": "groups-for-code.addAllTabsToGroup",
+        "title": "Add all open tabs to group"
       }
     ],
     "views": {

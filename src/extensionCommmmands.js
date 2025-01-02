@@ -29,7 +29,7 @@ function registerCommands(context, state) {
             }
         });
     }));
-    
+
     /**
      * Removes a tab from a group, given its name
      */
@@ -42,7 +42,7 @@ function registerCommands(context, state) {
         vscode.window.showQuickPick(tabOptions, {
             placeHolder: 'Chose a tab'
         }).then(tab => {
-            if(state.removeTab(tab.label))
+            if (state.removeTab(tab.label))
                 vscode.window.showInformationMessage("Tab " + tab.label + " removed succesfully");
             else
                 vscode.window.showErrorMessage("Error: Tab not removed");
@@ -54,20 +54,20 @@ function registerCommands(context, state) {
      * Creates a new empty group
      */
     let addGroupCommand = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.newGroup', async () => {
-        
+
         let value = await vscode.window.showInputBox({
             placeHolder: "group",
             prompt: "New group?"
         });
 
-        if(value)
-            if(state.addGroup(value))
+        if (value)
+            if (state.addGroup(value))
                 vscode.window.showInformationMessage(`Group: ${value}, created correctly`);
             else
                 vscode.window.showErrorMessage(`Error: group already existing`);
-        else 
+        else
             vscode.window.showErrorMessage(`Error: undefined group name`);
-        
+
     }));
 
     /**
@@ -83,9 +83,9 @@ function registerCommands(context, state) {
             }
             vscode.window.showInformationMessage(displayText);
 
-        } else{
+        } else {
             vscode.window.showErrorMessage(`No group assigned`);
-		}
+        }
 
     });
 
@@ -95,7 +95,7 @@ function registerCommands(context, state) {
      */
     let addActiveToGroupCommand = vscode.commands.registerCommand('groups-for-code.addActiveToGroup', async () => {
         let activeTab = utils.getActiveTab();
-    
+
 
         let groupOptions = Object.keys(state.groups).map(groupName => {
             return { label: groupName };
@@ -109,11 +109,36 @@ function registerCommands(context, state) {
                     vscode.window.showInformationMessage(`${activeTab.label} added to group: ${selectedGroupName.label}`);
                 else
                     vscode.window.showErrorMessage(`${activeTab.label} not added to group: tab already in a group`);
-            
-            }else 
+
+            } else
                 vscode.window.showErrorMessage(`Error: undefined group name`);
         });
 
+    });
+
+    let addAllTabsToGroupCommand = vscode.commands.registerCommand('groups-for-code.addAllTabsToGroup', async () => {
+        let tabs = utils.getOpenTabs();
+
+        let groupOptions = Object.keys(state.groups).map(groupName => {
+            return { label: groupName };
+        });
+
+        vscode.window.showQuickPick(groupOptions, {
+            placeHolder: 'Chose a group'
+        }).then(selectedGroupName => {
+
+            for (let tab in tabs) {
+
+                if (selectedGroupName.label) {
+                    if (state.addToGroup(tab.label, tab.path, selectedGroupName.label))
+                        vscode.window.showInformationMessage(`${tab.label} added to group: ${selectedGroupName.label}`);
+                    else
+                        vscode.window.showErrorMessage(`${tab.label} not added to group: tab already in a group`);
+
+                } else
+                    vscode.window.showErrorMessage(`Error: undefined group name`);
+            }
+        });
     });
 
     /**
@@ -138,19 +163,19 @@ function registerCommands(context, state) {
      */
     let openGroupTabsCommand = vscode.commands.registerCommand('groups-for-code.openGroupTabs', async (groupName) => {
         vscode.commands.executeCommand('workbench.action.closeAllEditors');
-        if(groupName.label != undefined){
+        if (groupName.label != undefined) {
             let tabs = state.getTabsForGroup(groupName.label);
 
             for (let tab of tabs) {
                 let document = await vscode.workspace.openTextDocument(tab.path);
                 vscode.window.showTextDocument(document, { preview: false });
+            }
         }
-        }
-        
-    });
-    
 
-    return [removeTabCommand, openGroupTabsCommand, openTabCommand, removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
+    });
+
+
+    return [addAllTabsToGroupCommand, removeTabCommand, openGroupTabsCommand, openTabCommand, removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
 }
 
 module.exports = {
