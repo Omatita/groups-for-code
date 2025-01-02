@@ -17,7 +17,7 @@ function getActiveTab() {
 function getOpenTabs() {
     let tabs = vscode.window.tabGroups.activeTabGroup.tabs;
     let docs = vscode.workspace.textDocuments;
-    let open = [];
+    let open = []; 
 
     let tabMap = [];
 
