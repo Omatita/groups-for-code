@@ -15,17 +15,16 @@ function getActiveTab() {
  * @returns all open tabs 
  */
 function getOpenTabs() {
-    let tabs = vscode.window.tabGroups.activeTabGroup.tabs;
-    let docs = vscode.workspace.textDocuments;
-    let open = []; 
+    const openTabs = vscode.window.tabGroups.all[0].tabs;
 
-    let tabMap = [];
+    const tabsInfo = openTabs
+        .filter(tab => tab.label && tab.input.uri )
+        .map(tab => ({
+            label: tab.label || 'Untitled',
+            path: tab.input.uri.fsPath
+        }));
 
-    tabs.forEach(tab => {
-        tabMap.push(tab.label);
-    });
-
-    //TODO get paths and add them to `open` with the tab labels
+    return tabsInfo;
 }
 
 module.exports = {

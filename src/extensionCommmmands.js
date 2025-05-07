@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const utils = require('./utils');
+const regex = require("")
 
 function registerCommands(context, state) {
 
@@ -142,6 +143,14 @@ function registerCommands(context, state) {
     });
 
     /**
+    * add all tabs under a given regex pattern
+    * */
+    let regexAdd = context.subscriptions.push(vscode.commands.registerCommand('groups-for-code.regexAdd', async () => {
+
+
+    }));
+
+    /**
      * Opens a tab inside a group given the path
      */
     let openTabCommand = vscode.commands.registerCommand('groups-for-code.openTab', async (path) => {
@@ -175,7 +184,7 @@ function registerCommands(context, state) {
     });
 
 
-    return [addAllTabsToGroupCommand, removeTabCommand, openGroupTabsCommand, openTabCommand, removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
+    return [addAllTabsToGroupCommand, removeTabCommand, openGroupTabsCommand, regexAdd, openTabCommand, removeGroupCommand, addActiveToGroupCommand, addGroupCommand, showGroupsCommand, resetCommand];
 }
 
 module.exports = {

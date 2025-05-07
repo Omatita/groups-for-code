@@ -3,7 +3,7 @@
   "publisher": "Omatita",
   "displayName": "groups for code",
   "description": "groups tabs in visual studio code",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "icon": "./logo-dark-groups.png",
   "repository": {
     "type": "git",

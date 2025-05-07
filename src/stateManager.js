@@ -93,10 +93,10 @@ class StateManager {
                 this.tabGroups[groupName] = this.tabGroups[groupName].filter(tab => tab.label !== tabName);
             });
             this.saveState(); // Save the updated state and refresh the view
-        }catch(e){
+        } catch (e) {
             return false;
         }
-        
+
 
         return true;
     }
@@ -116,13 +116,17 @@ class StateManager {
 
         const tab = { label: tabLabel, path: tabPath };
 
-        if (!this.tabGroups[groupName]) {
-            this.tabGroups[groupName] = [tab];
-        } else if (!this.tabGroups[groupName].find(t => t.label === tabLabel)) {
-            this.tabGroups[groupName].push(tab);
-        } else {
-            return false;
+
+        if (tabLabel != 'Untitled') {
+            if (!this.tabGroups[groupName]) {
+                this.tabGroups[groupName] = [tab];
+            } else if (!this.tabGroups[groupName].find(t => t.label === tabLabel)) {
+                this.tabGroups[groupName].push(tab);
+            } else {
+                return false;
+            }
         }
+
 
         this.saveState();
         return true;
